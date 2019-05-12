@@ -1,3 +1,4 @@
+package guicomponents;
 import java.sql.*;
 
 public class JDBC {

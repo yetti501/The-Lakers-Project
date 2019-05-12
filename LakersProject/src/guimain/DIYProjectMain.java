@@ -1,23 +1,32 @@
+package guimain;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.Serializable;
 import java.sql.SQLException;
 
 import javax.swing.*;
 
-public class DIYProjects implements ActionListener{
+import guicomponents.CenterPanelDesign;
+import guicomponents.CreateProjectDesign;
+import guicomponents.FooterPanelDesign;
+import guicomponents.JDBC;
+import guicomponents.LeftPanelDesign;
+import guicomponents.TitlePanelDesign;
+
+
+/**
+ * Main controller class for the application, sets up the GUI and its related components.
+ * @author Lakers Project Team
+ */
+public class DIYProjectMain implements ActionListener, Serializable{
 	
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		System.out.println("Before DB Call");
-		JDBC.JDBCSource();
-		System.out.println("AfterDB Call");
-		
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new DIYProjects();
-			}
-		});
-	}
+
+	private static final long serialVersionUID = -109507167636461364L;
+
+	
+/** Version Field */
+	public double myVersion;
+	
 	
 /**** FRAMES *****/
 	JFrame FRAME = new JFrame("DIY Project");
@@ -47,7 +56,7 @@ public class DIYProjects implements ActionListener{
 	JButton btnToolsAdd = new JButton("Add Tools");
 	JButton btnToolsRemove = new JButton("Remove Tools");
 	JButton btnInstructionAdd = new JButton("Add Instruction");
-	JButton btnInstructionRemove = new JButton("REmove Instruction");
+	JButton btnInstructionRemove = new JButton("Remove Instruction");
 	JButton btnSaveProject = new JButton("Save New Project");
 	/* Text Fields */
 	JTextField textProjectName = new JTextField("Enter Project Name");
@@ -75,12 +84,32 @@ public class DIYProjects implements ActionListener{
 	/***** Center Panel *****/
 	static JPanel CenterPanel = new JPanel();
 	
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		
+		System.out.println("Before DB Call");
+		JDBC.JDBCSource();
+		System.out.println("AfterDB Call");
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new DIYProjectMain();
+			}
+		});
+	}
 	
 	
-/*
+/**
+ * 
  * This is where all the different frame objects will be added to the DIY Projects frame. 
+ * 
  */
-	public DIYProjects() {
+	public DIYProjectMain() {
+		
+		Version projVersion = new Version(this);
+		projVersion.setVersion();
+		myVersion = projVersion.getVersion();
+		
 		MainPanel.setLayout(new BorderLayout());
 /***** TITLE PANEL *****/				
 		TitlePanelDesign.addTitlePanel(MainPanel, TitlePanel);
@@ -133,7 +162,7 @@ public class DIYProjects implements ActionListener{
 
 		 about = new JMenuItem(new AbstractAction("About..."){
 			    public void actionPerformed(ActionEvent e) {
-			        JOptionPane.showMessageDialog(FRAME, "Made by the Lakers Project Team!");
+			        JOptionPane.showMessageDialog(FRAME, "Made by the Lakers Project Team!\n Version: " + myVersion);
 			    }
 			});
 			menu.add(about);
@@ -143,6 +172,7 @@ public class DIYProjects implements ActionListener{
 		FRAME.setPreferredSize(new Dimension(800, 600));
 		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FRAME.pack();
+		FRAME.setLocationRelativeTo(null);
 		FRAME.setVisible(true);
 	}
 	
@@ -157,4 +187,5 @@ public class DIYProjects implements ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
+
 }
