@@ -33,7 +33,7 @@ public class DIYProjectMain implements ActionListener, Serializable{
 	
 /**** PANELS ****/
 	JPanel MainPanel = new JPanel();
-	static JPanel TitlePanel = new JPanel();s
+	static JPanel TitlePanel = new JPanel();
 	static JPanel LeftPanel = new JPanel();
 	static JPanel FooterPanel = new JPanel();
 	
