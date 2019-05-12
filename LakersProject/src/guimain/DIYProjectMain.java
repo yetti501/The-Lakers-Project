@@ -6,10 +6,10 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
+import data.JDBC;
 import guicomponents.CenterPanelDesign;
 import guicomponents.CreateProjectDesign;
 import guicomponents.FooterPanelDesign;
-import guicomponents.JDBC;
 import guicomponents.LeftPanelDesign;
 import guicomponents.TitlePanelDesign;
 
@@ -33,7 +33,7 @@ public class DIYProjectMain implements ActionListener, Serializable{
 	
 /**** PANELS ****/
 	JPanel MainPanel = new JPanel();
-	static JPanel TitlePanel = new JPanel();
+	static JPanel TitlePanel = new JPanel();s
 	static JPanel LeftPanel = new JPanel();
 	static JPanel FooterPanel = new JPanel();
 	
