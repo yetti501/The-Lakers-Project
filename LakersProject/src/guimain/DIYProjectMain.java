@@ -25,7 +25,7 @@ public class DIYProjectMain implements ActionListener, Serializable{
 
 	
 /** Version Field */
-	public double myVersion;
+	public static double myVersion;
 	
 	
 /**** FRAMES *****/
