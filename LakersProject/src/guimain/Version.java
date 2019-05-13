@@ -16,7 +16,7 @@ public class Version {
 	public DIYProjectMain myProj;
 	
 	/** Grabs the serialized version of the object. */
-	ByteArrayOutputStream verCounter;
+	private ByteArrayOutputStream verCounter;
 	
 	/**
 	 * Instantiates the class parameters.
