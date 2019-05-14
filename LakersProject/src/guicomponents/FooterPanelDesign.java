@@ -1,3 +1,4 @@
+package guicomponents;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
@@ -8,7 +9,7 @@ public class FooterPanelDesign {
 	public static void addFooterPanel(JPanel MainPanel, JPanel FooterPanel) {
 		System.out.println("Footer Panel Added.");
 		MainPanel.add(FooterPanel, BorderLayout.PAGE_END);
-		FooterPanel.setBackground(Color.blue);
+		FooterPanel.setBackground(Color.LIGHT_GRAY);
 	}
 	
 	public static void removeFooterPanel(JPanel MainPanel, JPanel FooterPanel) {

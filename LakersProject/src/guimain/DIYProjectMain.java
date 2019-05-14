@@ -1,10 +1,33 @@
+package guimain;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.Serializable;
 import java.sql.SQLException;
 
 import javax.swing.*;
 
-public class DIYProjects implements ActionListener{
+import data.JDBC;
+import guicomponents.CenterPanelDesign;
+import guicomponents.CreateProjectDesign;
+import guicomponents.FooterPanelDesign;
+import guicomponents.LeftPanelDesign;
+import guicomponents.TitlePanelDesign;
+
+
+/**
+ * Main controller class for the application, sets up the GUI and its related components.
+ * @author Lakers Project Team
+ */
+public class DIYProjectMain implements ActionListener, Serializable{
+	
+
+	private static final long serialVersionUID = -109507167636461364L;
+
+	
+/** Version Field */
+	public static double myVersion;
+	
+	
 /**** FRAMES *****/
 	JFrame FRAME = new JFrame("DIY Project");
 	
@@ -21,7 +44,6 @@ public class DIYProjects implements ActionListener{
 	JButton btnRemoveProject = new JButton("Remove Project");
 	JButton btnImportProject = new JButton("Import Project");
 	JButton btnExportProject = new JButton("Export Project");
-		
 /***** Create New Project Panel *****/
 	/* Panels */
 	JPanel CreateProjectPanel = new JPanel();
@@ -34,7 +56,7 @@ public class DIYProjects implements ActionListener{
 	JButton btnToolsAdd = new JButton("Add Tools");
 	JButton btnToolsRemove = new JButton("Remove Tools");
 	JButton btnInstructionAdd = new JButton("Add Instruction");
-	JButton btnInstructionRemove = new JButton("REmove Instruction");
+	JButton btnInstructionRemove = new JButton("Remove Instruction");
 	JButton btnSaveProject = new JButton("Save New Project");
 	/* Text Fields */
 	JTextField textProjectName = new JTextField("Enter Project Name");
@@ -54,16 +76,40 @@ public class DIYProjects implements ActionListener{
 	String[] InstructionArray;
 	JList<String> listInstruction = new JList<>(InstructionArray);
 	
+	/* Menu Bar */
+	JMenuBar menuBar = new JMenuBar();
+	JMenu menu = new JMenu("Help");
+	JMenuItem about;
 	
 	/***** Center Panel *****/
 	static JPanel CenterPanel = new JPanel();
 	
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		
+		System.out.println("Before DB Call");
+		JDBC.JDBCSource();
+		System.out.println("AfterDB Call");
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new DIYProjectMain();
+			}
+		});
+	}
 	
 	
-/*
+/**
+ * 
  * This is where all the different frame objects will be added to the DIY Projects frame. 
+ * 
  */
-	public DIYProjects() {
+	public DIYProjectMain() {
+		
+		Version projVersion = new Version(this);
+		projVersion.setVersion();
+		myVersion = projVersion.getVersion();
+		
 		MainPanel.setLayout(new BorderLayout());
 /***** TITLE PANEL *****/				
 		TitlePanelDesign.addTitlePanel(MainPanel, TitlePanel);
@@ -111,11 +157,22 @@ public class DIYProjects implements ActionListener{
 /***** FOOTER PANEL *****/
 		FooterPanelDesign.addFooterPanel(MainPanel, FooterPanel);
 		
+/** MENU BAR */	
+		menuBar.add(menu);
+
+		 about = new JMenuItem(new AbstractAction("About..."){
+			    public void actionPerformed(ActionEvent e) {
+			        JOptionPane.showMessageDialog(FRAME, "Made by the Lakers Project Team!\n Version: " + myVersion);
+			    }
+			});
+			menu.add(about);
 /***** FRAME *****/
+		FRAME.setJMenuBar(menuBar);
 		FRAME.add(MainPanel);
 		FRAME.setPreferredSize(new Dimension(800, 600));
 		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FRAME.pack();
+		FRAME.setLocationRelativeTo(null);
 		FRAME.setVisible(true);
 	}
 	
@@ -123,24 +180,12 @@ public class DIYProjects implements ActionListener{
 		return CenterPanel;
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		System.out.println("Hello Grant");
-		
-		System.out.println("Before DB Call");
-		JDBC.JDBCSource();
-		System.out.println("AfterDB Call");
-		
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new DIYProjects();
-			}
-		});
-	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
+
 }
