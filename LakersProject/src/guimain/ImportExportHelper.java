@@ -14,17 +14,21 @@ public class ImportExportHelper {
 	public static void main(String[]args) {
 		ImportExportHelper ieh = new ImportExportHelper();
 		
-		ieh.importData("Test.csv");
+		ieh.importUserName("Test.csv");
+		System.out.println(ieh.myUserName);
+		System.out.println(ieh.myEmail);
 	}
 	
 	ArrayList<Project> myProjects;
 	String myFileName;
 	String myUserName;
+	String myEmail;
 	
 	public ImportExportHelper() {
 		myProjects = new ArrayList<Project>();
 		myFileName = "";
 		myUserName = "";
+		myEmail = "";
 	}
 	
 	
@@ -32,19 +36,22 @@ public class ImportExportHelper {
 		myProjects = theProjects; 
 		myFileName = theFileName;
 		myUserName = "";
+		myEmail = "";
 	}
 	
 	
 	public ImportExportHelper(ArrayList<Project> theProjects,
 			String theFileName,
-			String theUserName) {
+			String theUserName,
+			String theEmail) {
 		myProjects = theProjects;
 		myFileName = theFileName;
 		myUserName = theUserName;
+		myEmail = theEmail;
 	}
 	
 	
-	public void importData(String theFileName) {
+	public void importProjects(String theFileName) {
 		File file = new File(theFileName);
 		try {
 			Scanner inputStream = new Scanner(file);
@@ -59,17 +66,39 @@ public class ImportExportHelper {
 			e.printStackTrace();
 		}
 		
-		
-		
 	}
 	
 	
-	public File exportData(){
+	public void importUserName(String theFileName) {
+		File file = new File(theFileName);
+		try {
+			Scanner inputStream = new Scanner(file);
+			while(inputStream.hasNext()) {
+				String data = inputStream.next();
+				String[] values = data.split(",");
+				//We can assume that User Name files will only have two inputs.
+				myUserName = values[0];
+				myEmail = values[1];
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public File exportProjects(){
 		File projects = new File("projects");
 		
 		return projects;
 	}
 	
+	
+	public File exportUserName() {
+		File userName = new File("username.csv");
+		
+		
+		return userName;
+	}
 	
 	public void setFileName(String newName) {
 		myFileName = newName;
