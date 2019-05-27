@@ -13,14 +13,6 @@ import data.Project;
 public class ImportExportHelper {
 
 	
-	public static void main(String[]args) {
-		ImportExportHelper ieh = new ImportExportHelper();
-		
-		ieh.importUserName("Test.csv");
-		System.out.println(ieh.myUserName);
-		System.out.println(ieh.myEmail);
-	}
-	
 	ArrayList<Project> myProjects;
 	String myFileName;
 	String myUserName;
@@ -80,21 +72,16 @@ public class ImportExportHelper {
 	}
 	
 	
-	public void importUserName(String theFileName) {
+	public void importUserName(String theFileName) throws FileNotFoundException {
 		File file = new File(theFileName);
-		try {
-			Scanner inputStream = new Scanner(file);
-			while(inputStream.hasNext()) {
-				String data = inputStream.next();
-				String[] values = data.split(",");
-				//We can assume that User Name files will only have two inputs.
-				myUserName = values[0];
-				myEmail = values[1];
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		Scanner inputStream = new Scanner(file);
+		while(inputStream.hasNext()) {
+			String data = inputStream.next();
+			String[] values = data.split(",");
+			//We can assume that User Name files will only have two inputs.
+			myUserName = values[0];
+			myEmail = values[1];
 		}
-		
 	}
 	
 	public File exportProjects(){

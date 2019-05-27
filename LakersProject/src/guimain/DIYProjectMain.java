@@ -1,6 +1,7 @@
 package guimain;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -199,7 +200,7 @@ public class DIYProjectMain implements ActionListener, Serializable{
 					imp.exportSettings();
 			        JOptionPane.showMessageDialog(FRAME, "Exported Settings Successfully");
 				} catch (IOException e1) {
-			        JOptionPane.showMessageDialog(FRAME, "Error Exporting Settings!");
+
 				}
 
 		    }
@@ -208,11 +209,16 @@ public class DIYProjectMain implements ActionListener, Serializable{
 		JMenuItem importSettings = new JMenuItem(new AbstractAction("Import Settings..."){
 		    public void actionPerformed(ActionEvent e) {
 		        String fileName = JOptionPane.showInputDialog(FRAME, "Please Enter a File to Import Settings From.");
-		        imp.importUserName(fileName);
-		        myUserName = imp.myUserName;
-		        myEmail = imp.myEmail;
-		        JOptionPane.showMessageDialog(FRAME, "Imported Username " + myUserName + " and Email " + myEmail);
-		        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
+		        try {
+					imp.importUserName(fileName);
+			        JOptionPane.showMessageDialog(FRAME, "Imported Username " + myUserName + " and Email " + myEmail);
+			        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
+			        myUserName = imp.myUserName;
+			        myEmail = imp.myEmail;
+					
+				} catch (FileNotFoundException e1) {
+			        JOptionPane.showMessageDialog(FRAME, "File not found, please try again!");
+				}
 		    }
 		});
 		
