@@ -1,6 +1,7 @@
 package guimain;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 
@@ -24,12 +25,16 @@ public class DIYProjectMain implements ActionListener, Serializable{
 	private static final long serialVersionUID = -109507167636461364L;
 
 	
+	/** APPLICATION SETTINGS */
+	String myUserName;
+	String myEmail;
+	ImportExportHelper imp;
+	
 /** Version Field */
 	public static double myVersion;
 	
-	
 /**** FRAMES *****/
-	JFrame FRAME = new JFrame("DIY Project");
+	JFrame FRAME;
 	
 /**** PANELS ****/
 	JPanel MainPanel = new JPanel();
@@ -78,8 +83,10 @@ public class DIYProjectMain implements ActionListener, Serializable{
 	
 	/* Menu Bar */
 	JMenuBar menuBar = new JMenuBar();
-	JMenu menu = new JMenu("Help");
+	JMenu help = new JMenu("Help");
+	JMenu file = new JMenu("File");
 	JMenuItem about;
+	
 	
 	/***** Center Panel *****/
 	static JPanel CenterPanel = new JPanel();
@@ -105,6 +112,11 @@ public class DIYProjectMain implements ActionListener, Serializable{
  * 
  */
 	public DIYProjectMain() {
+		
+		myUserName = "Not Set";
+		myEmail = "Not Set";
+		FRAME = new JFrame("DIY Project | " + "UserName: " + myUserName);
+		imp = new ImportExportHelper();
 		
 		Version projVersion = new Version(this);
 		projVersion.setVersion();
@@ -158,14 +170,64 @@ public class DIYProjectMain implements ActionListener, Serializable{
 		FooterPanelDesign.addFooterPanel(MainPanel, FooterPanel);
 		
 /** MENU BAR */	
-		menuBar.add(menu);
+		menuBar.add(file);
+		
 
+		
+		JMenuItem setUsername = new JMenuItem(new AbstractAction("Set/Change Username..."){
+		    public void actionPerformed(ActionEvent e) {
+		        myUserName = JOptionPane.showInputDialog(FRAME, "Please enter a username.");
+		        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
+		        JOptionPane.showMessageDialog(FRAME, "User Name Changed Successfully!");
+
+		    }
+		});
+		JMenuItem setEmail = new JMenuItem(new AbstractAction("Set/Change Email..."){
+		    public void actionPerformed(ActionEvent e) {
+		        myEmail = JOptionPane.showInputDialog(FRAME, "Please Enter an Email Address.");
+		        JOptionPane.showMessageDialog(FRAME, "Email Changed Successfully!");
+		    }
+		});
+		
+		JMenuItem exportSettings = new JMenuItem(new AbstractAction("Export Settings..."){
+		    public void actionPerformed(ActionEvent e) {
+		        String fileName = JOptionPane.showInputDialog(FRAME, "Please Enter a File to export Settings to (.csv)...");      
+		        imp.setFileName(fileName);
+		        imp.setEmail(myEmail);
+		        imp.setUserName(myUserName);
+		        try {
+					imp.exportSettings();
+			        JOptionPane.showMessageDialog(FRAME, "Exported Settings Successfully");
+				} catch (IOException e1) {
+			        JOptionPane.showMessageDialog(FRAME, "Error Exporting Settings!");
+				}
+
+		    }
+		});
+		
+		JMenuItem importSettings = new JMenuItem(new AbstractAction("Import Settings..."){
+		    public void actionPerformed(ActionEvent e) {
+		        String fileName = JOptionPane.showInputDialog(FRAME, "Please Enter a File to Import Settings From.");
+		        imp.importUserName(fileName);
+		        myUserName = imp.myUserName;
+		        myEmail = imp.myEmail;
+		        JOptionPane.showMessageDialog(FRAME, "Imported Username " + myUserName + " and Email " + myEmail);
+		        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
+		    }
+		});
+		
+		file.add(setUsername);
+		file.add(setEmail);
+		file.add(exportSettings);
+		file.add(importSettings);
+
+		menuBar.add(help);
 		 about = new JMenuItem(new AbstractAction("About..."){
 			    public void actionPerformed(ActionEvent e) {
 			        JOptionPane.showMessageDialog(FRAME, "Made by the Lakers Project Team!\n Version: " + myVersion);
 			    }
 			});
-			menu.add(about);
+			help.add(about);
 /***** FRAME *****/
 		FRAME.setJMenuBar(menuBar);
 		FRAME.add(MainPanel);
