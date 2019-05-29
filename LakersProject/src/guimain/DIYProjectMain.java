@@ -8,11 +8,11 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
-import data.JDBC;
 import guicomponents.CenterPanelDesign;
 import guicomponents.CreateProjectDesign;
 import guicomponents.FooterPanelDesign;
 import guicomponents.LeftPanelDesign;
+import guicomponents.ProjectInfoPanelDesign;
 import guicomponents.TitlePanelDesign;
 
 
@@ -42,6 +42,8 @@ public class DIYProjectMain implements Serializable{
 	static JPanel TitlePanel = new JPanel();
 	static JPanel LeftPanel = new JPanel();
 	static JPanel FooterPanel = new JPanel();
+	static JPanel InfoPanel = new JPanel();
+	static JPanel CenterPanel = new JPanel();
 	
 /***** BUTTONS: Left Panel *****/
 	JButton btnCreateProject = new JButton("Create Project");	
@@ -88,16 +90,14 @@ public class DIYProjectMain implements Serializable{
 	JMenu file = new JMenu("File");
 	JMenuItem about;
 	
+	/* Info Panel */
+	JButton btnProjectInfo = new JButton("Info Panel");
 	
 	/***** Center Panel *****/
-	static JPanel CenterPanel = new JPanel();
+	
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		
-		System.out.println("Before DB Call");
-		JDBC.JDBCSource();
-		System.out.println("AfterDB Call");
-		
+		//Class classMain = Class.forName("DIYProjectMain");
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -148,7 +148,7 @@ public class DIYProjectMain implements Serializable{
 	                	MainPanel.revalidate();
 	                	MainPanel.repaint();
 	                } else {
-	                	System.out.println("CREATE NEW PROJECT NOT PRESSED");
+	                	System.out.println("CREATE NEW PROJECT NOT PRESSED!");
 	                }
 	                
 	        }  
@@ -160,6 +160,22 @@ public class DIYProjectMain implements Serializable{
 		LeftPanel.add(btnRemoveProject);
 		LeftPanel.add(btnImportProject);
 		LeftPanel.add(btnExportProject);
+		
+		LeftPanel.add(btnProjectInfo);
+		btnProjectInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == btnProjectInfo) {
+					System.out.println("PROJECT INFO BUTTON PUSHED");
+					//put your code here... 
+					CenterPanelDesign.removeCenterPanel(MainPanel, CenterPanel);
+					ProjectInfoPanelDesign.addProjectPanel(MainPanel, InfoPanel);
+					MainPanel.revalidate();
+					MainPanel.repaint();
+				} else {
+					System.out.println("CREATE INFO PANEL NOT PRESSED!");
+				}
+			}
+		});
 		
 /***** CENTER PANEL *****/
 		CenterPanelDesign.addCenterPanel(MainPanel);
@@ -173,7 +189,10 @@ public class DIYProjectMain implements Serializable{
 /** MENU BAR */	
 		menuBar.add(file);
 		
-
+/** Info Panel */
+		
+		
+		
 		
 		JMenuItem setUsername = new JMenuItem(new AbstractAction("Set/Change Username..."){
 		    public void actionPerformed(ActionEvent e) {
