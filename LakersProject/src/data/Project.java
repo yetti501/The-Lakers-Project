@@ -32,7 +32,7 @@ public class Project {
 		return myProjectTime;
 	}
 	
-	public ProjItems getProjectItmes() {
+	public ProjItems getProjectItems() {
 		return myProjectItems;
 	}
 	

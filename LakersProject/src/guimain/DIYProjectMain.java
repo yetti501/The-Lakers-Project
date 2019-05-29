@@ -20,7 +20,7 @@ import guicomponents.TitlePanelDesign;
  * Main controller class for the application, sets up the GUI and its related components.
  * @author Lakers Project Team
  */
-public class DIYProjectMain implements ActionListener, Serializable{
+public class DIYProjectMain implements Serializable{
 	
 
 	private static final long serialVersionUID = -109507167636461364L;
@@ -230,10 +230,11 @@ public class DIYProjectMain implements ActionListener, Serializable{
 		        String fileName = JOptionPane.showInputDialog(FRAME, "Please Enter a File to Import Settings From.");
 		        try {
 					imp.importUserName(fileName);
-			        JOptionPane.showMessageDialog(FRAME, "Imported Username " + myUserName + " and Email " + myEmail);
-			        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
 			        myUserName = imp.myUserName;
 			        myEmail = imp.myEmail;
+			        JOptionPane.showMessageDialog(FRAME, "Imported Username " + myUserName + " and Email " + myEmail);
+			        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
+
 					
 				} catch (FileNotFoundException e1) {
 			        JOptionPane.showMessageDialog(FRAME, "File not found, please try again!");
@@ -266,13 +267,4 @@ public class DIYProjectMain implements ActionListener, Serializable{
 	public static JPanel getCenterPanel() {
 		return CenterPanel;
 	}
-
-
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
