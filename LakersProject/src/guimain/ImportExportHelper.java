@@ -105,7 +105,6 @@ public class ImportExportHelper {
 	
 	
 	public void databaseView() {
-		
 	}
 	
 	
