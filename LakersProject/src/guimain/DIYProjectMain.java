@@ -8,8 +8,10 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
+import data.Database;
 import guicomponents.CenterPanelDesign;
 import guicomponents.CreateProjectDesign;
+import guicomponents.CreateProjectPanel;
 import guicomponents.FooterPanelDesign;
 import guicomponents.LeftPanelDesign;
 import guicomponents.ProjectInfoPanelDesign;
@@ -30,7 +32,7 @@ public class DIYProjectMain implements Serializable{
 	String myUserName;
 	String myEmail;
 	ImportExportHelper imp;
-	
+	Database myDatabase;
 /** Version Field */
 	public static double myVersion;
 	
@@ -44,6 +46,7 @@ public class DIYProjectMain implements Serializable{
 	static JPanel FooterPanel = new JPanel();
 	static JPanel InfoPanel = new JPanel();
 	static JPanel CenterPanel = new JPanel();
+	static CreateProjectPanel myCreateProjectPanel;
 	
 /***** BUTTONS: Left Panel *****/
 	JButton btnCreateProject = new JButton("Create Project");	
@@ -52,38 +55,6 @@ public class DIYProjectMain implements Serializable{
 	JButton btnRemoveProject = new JButton("Remove Project");
 	JButton btnImportProject = new JButton("Import Project");
 	JButton btnExportProject = new JButton("Export Project");
-/***** Create New Project Panel *****/
-	/* Panels */
-	JPanel CreateProjectPanel = new JPanel();
-	JPanel NorthDataPage = new JPanel();
-	JPanel SouthDataPage = new JPanel();	
-	/* Buttons */
-	JButton btnUploadImage = new JButton("Upload Image");
-	JButton btnMaterialsAdd = new JButton("Add Materials");
-	JButton btnMaterialsRemove = new JButton("Remove Materials");
-	JButton btnToolsAdd = new JButton("Add Tools");
-	JButton btnToolsRemove = new JButton("Remove Tools");
-	JButton btnInstructionAdd = new JButton("Add Instruction");
-	JButton btnInstructionRemove = new JButton("Remove Instruction");
-	JButton btnSaveProject = new JButton("Save New Project");
-	/* Text Fields */
-	JTextField textProjectName = new JTextField("Enter Project Name");
-	JTextField textLowBoundTime = new JTextField("Enter Time");
-	JTextField textUpperBoundTime = new JTextField("Enter Time");
-	JTextField textDescription = new JTextField("Project Description");
-	/* Drop Downs */
-	String[] difficultyArray = {"Easy", "Medium", "Hard", "Expert", "Do Not Attempt"};
-	JComboBox dropDifficulty = new JComboBox(difficultyArray);
-	String[] timeArray = {"Seonds", "Minutes", "Hours", "Days", "Weeks", "Months", "Years", "Decades"};
-	JComboBox dropTimeUnits = new JComboBox(timeArray);
-	/* Lists */
-	String[] MaterialArray;
-	JList<String> listMaterials = new JList<>(MaterialArray);
-	String[] ToolArray;
-	JList<String> listTools = new JList<>(ToolArray);
-	String[] InstructionArray;
-	JList<String> listInstruction = new JList<>(InstructionArray);
-	
 	/* Menu Bar */
 	JMenuBar menuBar = new JMenuBar();
 	JMenu help = new JMenu("Help");
@@ -118,7 +89,7 @@ public class DIYProjectMain implements Serializable{
 		myEmail = "Not Set";
 		FRAME = new JFrame("DIY Project | " + "UserName: " + myUserName);
 		imp = new ImportExportHelper();
-		
+		myDatabase = new Database();
 		Version projVersion = new Version(this);
 		projVersion.setVersion();
 		myVersion = projVersion.getVersion();
@@ -131,7 +102,7 @@ public class DIYProjectMain implements Serializable{
 		//LeftPanelDesign.addLeftPanel(MainPanel, LeftPanel, CenterPanel, CreateProjectPanel, DataPage, NorthDataPage, SouthDataPage,
 		//		btnCreateProject, btnMyProject, btnFavoriteProject, btnRemoveProject, btnImportProject, btnExportProject);
 		
-		MainPanel.add(LeftPanel, BorderLayout.LINE_START);
+		MainPanel.add(LeftPanel, BorderLayout.WEST);
 		LeftPanel.setBackground(Color.DARK_GRAY);
 		
 		LeftPanel.setLayout(new BoxLayout(LeftPanel, BoxLayout.Y_AXIS));
@@ -139,14 +110,10 @@ public class DIYProjectMain implements Serializable{
 	    btnCreateProject.addActionListener(new ActionListener(){  
 	        public void actionPerformed(ActionEvent e){  
 	                if(e.getSource() == btnCreateProject) {
-	                	System.out.println("CREATE NEW PROJECT PRESSED");
-	                	CenterPanelDesign.removeCenterPanel(MainPanel, CenterPanel);
-	                	CreateProjectDesign.addCreateProjectPanel(MainPanel, CreateProjectPanel, NorthDataPage, SouthDataPage,
-	                			btnUploadImage, btnMaterialsAdd, btnMaterialsRemove, btnToolsAdd, btnToolsRemove, btnInstructionAdd, btnInstructionRemove, btnSaveProject, 
-	                			textProjectName, textLowBoundTime, textUpperBoundTime, textDescription, dropDifficulty, dropTimeUnits, 
-	                			listMaterials, listTools, listInstruction);
+	                	MainPanel.add(myCreateProjectPanel, BorderLayout.EAST);
 	                	MainPanel.revalidate();
 	                	MainPanel.repaint();
+	                	FRAME.pack();
 	                } else {
 	                	System.out.println("CREATE NEW PROJECT NOT PRESSED!");
 	                }
@@ -181,7 +148,7 @@ public class DIYProjectMain implements Serializable{
 		CenterPanelDesign.addCenterPanel(MainPanel);
 		
 /***** CREATE PROJECT PANEL *****/
-		//CreateProjectDesign.buildCreateProjectPanel(MainPanel, CreateProjectPanel);
+		myCreateProjectPanel = new CreateProjectPanel(myDatabase);
 		
 /***** FOOTER PANEL *****/
 		FooterPanelDesign.addFooterPanel(MainPanel, FooterPanel);
