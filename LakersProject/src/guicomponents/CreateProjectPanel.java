@@ -22,12 +22,17 @@ import data.Project;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Initial GUI for create project dialog.
+ * @author DWLooney
+ */
 public class CreateProjectPanel extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8848373101564972392L;
 	private Project myProject;
+	private Database myDatabase;
 	private JTextField enterNameField;
 	private JTextField costInput;
 	private JTextField timeFrom;
@@ -37,6 +42,7 @@ public class CreateProjectPanel extends JPanel {
 	 */
 	public CreateProjectPanel(Database theDatabase) {
 		myProject = new Project();
+		myDatabase = new Database();
 		setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{615, 0};
