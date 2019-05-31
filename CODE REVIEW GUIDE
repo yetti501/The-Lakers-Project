@@ -6,6 +6,8 @@ Nothing special to review in guiComponents project.
 
 In the data project, the project class and database class could be reviewed; Our project class calls other smaller object classes such
 as projFinances, projTime, projItems. 
+https://github.com/UWTLakersProject/The-Lakers-Project/tree/master/LakersProject/src/data
 
 In the guiMain project, the version class, ImportExportHelper class, and DIYProjectMain class are ready for review. The other class in the
 project is still a work in progress and will be essentially rebuilt over the weekend. 
+https://github.com/UWTLakersProject/The-Lakers-Project/tree/master/LakersProject/src/guimain
