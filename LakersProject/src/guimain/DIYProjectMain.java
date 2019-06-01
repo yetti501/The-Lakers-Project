@@ -9,63 +9,38 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 import data.Database;
-import guicomponents.CenterPanelDesign;
-import guicomponents.CreateProjectDesign;
+import data.Project;
 import guicomponents.CreateProjectPanel;
-import guicomponents.FooterPanelDesign;
-import guicomponents.LeftPanelDesign;
-import guicomponents.ProjectInfoPanelDesign;
-import guicomponents.TitlePanelDesign;
-
-
 /**
  * Main controller class for the application, sets up the GUI and its related components.
  * @author Lakers Project Team
  */
 public class DIYProjectMain implements Serializable{
 	
-
 	private static final long serialVersionUID = -109507167636461364L;
 
+/** APPLICATION SETTINGS */
+	private String myUserName;
+	private String myEmail;
+	private ImportExportHelper imp;
+	private Database myDatabase;
 	
-	/** APPLICATION SETTINGS */
-	String myUserName;
-	String myEmail;
-	ImportExportHelper imp;
-	Database myDatabase;
 /** Version Field */
 	public static double myVersion;
 	
 /**** FRAMES *****/
-	JFrame FRAME;
+	private JFrame FRAME;
 	
 /**** PANELS ****/
-	JPanel MainPanel = new JPanel();
-	static JPanel TitlePanel = new JPanel();
-	static JPanel LeftPanel = new JPanel();
-	static JPanel FooterPanel = new JPanel();
-	static JPanel InfoPanel = new JPanel();
-	static JPanel CenterPanel = new JPanel();
-	static CreateProjectPanel myCreateProjectPanel;
+	private final JPanel myMainPanel;
+    private final JPanel myTitlePanel;
+	private final JPanel myLeftPanel;
+	private final JPanel myFooterPanel = new JPanel();
+	private final JPanel myInfoPanel;
+	private CreateProjectPanel myCreateProjectPanel;
 	
-/***** BUTTONS: Left Panel *****/
-	JButton btnCreateProject = new JButton("Create Project");	
-	JButton btnMyProject = new JButton("My Project");
-	JButton btnFavoriteProject = new JButton("Favorite Project");
-	JButton btnRemoveProject = new JButton("Remove Project");
-	JButton btnImportProject = new JButton("Import Project");
-	JButton btnExportProject = new JButton("Export Project");
-	/* Menu Bar */
-	JMenuBar menuBar = new JMenuBar();
-	JMenu help = new JMenu("Help");
-	JMenu file = new JMenu("File");
-	JMenuItem about;
-	
-	/* Info Panel */
-	JButton btnProjectInfo = new JButton("Info Panel");
-	
-	/***** Center Panel *****/
-	
+/**** Menu Bar *****/
+	private JMenuBar myMenuBar;
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		//Class classMain = Class.forName("DIYProjectMain");
@@ -85,34 +60,80 @@ public class DIYProjectMain implements Serializable{
  */
 	public DIYProjectMain() {
 		
+		//Fields for model
 		myUserName = "Not Set";
 		myEmail = "Not Set";
 		FRAME = new JFrame("DIY Project | " + "UserName: " + myUserName);
 		imp = new ImportExportHelper();
+		myCreateProjectPanel = new CreateProjectPanel(myDatabase);
 		myDatabase = new Database();
+		
+		///Construct Panel
+		myLeftPanel = new JPanel();
+		myMainPanel = new JPanel();
+		myInfoPanel = new JPanel();
+		myTitlePanel = new JPanel();
+		myMenuBar = new JMenuBar();
+		
+		//Setup main panel
+		myMainPanel.setBackground(Color.DARK_GRAY);
+		myMainPanel.setLayout(new BorderLayout());
+		myMainPanel.add(myFooterPanel, BorderLayout.SOUTH);
+		
+		//Constructor Methods
+		createInfoPanel();
+		createLeftPanel();
+		createTitlePanel();
+		createMenu();
+		
+
+		
+		//Add components / setup frame
+		FRAME.setJMenuBar(myMenuBar);
+		FRAME.setPreferredSize(new Dimension(800, 600));
+		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		FRAME.getContentPane().add(myMainPanel);
+		FRAME.repaint();
+		FRAME.pack();
+		FRAME.setLocationRelativeTo(null);
+		FRAME.setVisible(true);
+		
+		/** Version stuffs */
 		Version projVersion = new Version(this);
-		projVersion.setVersion();
 		myVersion = projVersion.getVersion();
+		projVersion.setVersion();
+	}
+	
+	
+	public void createInfoPanel() {
+		FlowLayout layout = new FlowLayout();
+		layout.setHgap(10);
+		layout.setVgap(10);
+		myInfoPanel.setLayout(layout);
+		myInfoPanel.setBackground(Color.LIGHT_GRAY);
+		myInfoPanel.add(new JButton("Close Window"));
+	}
+	
+	public void createLeftPanel() {
+		JButton btnCreateProject = new JButton("Create Project");	
+		JButton btnMyProject = new JButton("My Project");
+		JButton btnFavoriteProject = new JButton("Favorite Project");
+		JButton btnRemoveProject = new JButton("Remove Project");
+		JButton btnImportProject = new JButton("Import Project");
+		JButton btnExportProject = new JButton("Export Project");
+		JButton btnProjectInfo = new JButton("Info Panel");
 		
-		MainPanel.setLayout(new BorderLayout());
-/***** TITLE PANEL *****/				
-		TitlePanelDesign.addTitlePanel(MainPanel, TitlePanel);
-		
-/***** LEFT PANEL *****/		
-		//LeftPanelDesign.addLeftPanel(MainPanel, LeftPanel, CenterPanel, CreateProjectPanel, DataPage, NorthDataPage, SouthDataPage,
-		//		btnCreateProject, btnMyProject, btnFavoriteProject, btnRemoveProject, btnImportProject, btnExportProject);
-		
-		MainPanel.add(LeftPanel, BorderLayout.WEST);
-		LeftPanel.setBackground(Color.DARK_GRAY);
-		
-		LeftPanel.setLayout(new BoxLayout(LeftPanel, BoxLayout.Y_AXIS));
+		myLeftPanel.setBackground(Color.DARK_GRAY);
+		myLeftPanel.setLayout(new BoxLayout(myLeftPanel, BoxLayout.Y_AXIS));
 		
 	    btnCreateProject.addActionListener(new ActionListener(){  
 	        public void actionPerformed(ActionEvent e){  
 	                if(e.getSource() == btnCreateProject) {
-	                	MainPanel.add(myCreateProjectPanel, BorderLayout.EAST);
-	                	MainPanel.revalidate();
-	                	MainPanel.repaint();
+	                	myCreateProjectPanel = new CreateProjectPanel(myDatabase);
+	                	myMainPanel.remove(myInfoPanel);
+	                	myMainPanel.add(myCreateProjectPanel, BorderLayout.CENTER);
+	                	myMainPanel.revalidate();
+	                	myMainPanel.repaint();
 	                	FRAME.pack();
 	                } else {
 	                	System.out.println("CREATE NEW PROJECT NOT PRESSED!");
@@ -120,49 +141,44 @@ public class DIYProjectMain implements Serializable{
 	                
 	        }  
 	    });  
-		
-		LeftPanel.add(btnCreateProject);
-		LeftPanel.add(btnMyProject);
-		LeftPanel.add(btnFavoriteProject);
-		LeftPanel.add(btnRemoveProject);
-		LeftPanel.add(btnImportProject);
-		LeftPanel.add(btnExportProject);
-		
-		LeftPanel.add(btnProjectInfo);
+	    
 		btnProjectInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(e.getSource() == btnProjectInfo) {
-					System.out.println("PROJECT INFO BUTTON PUSHED");
-					//put your code here... 
-					CenterPanelDesign.removeCenterPanel(MainPanel, CenterPanel);
-					ProjectInfoPanelDesign.addProjectPanel(MainPanel, InfoPanel);
-					MainPanel.revalidate();
-					MainPanel.repaint();
-				} else {
-					System.out.println("CREATE INFO PANEL NOT PRESSED!");
-				}
+				myMainPanel.remove(myCreateProjectPanel);
+				myMainPanel.add(myInfoPanel, BorderLayout.CENTER);
+				myMainPanel.revalidate();
+				myMainPanel.repaint();
 			}
 		});
-		
-/***** CENTER PANEL *****/
-		CenterPanelDesign.addCenterPanel(MainPanel);
-		
-/***** CREATE PROJECT PANEL *****/
-		myCreateProjectPanel = new CreateProjectPanel(myDatabase);
-		
-/***** FOOTER PANEL *****/
-		FooterPanelDesign.addFooterPanel(MainPanel, FooterPanel);
-		
-/** MENU BAR */	
-		menuBar.add(file);
-		
-/** Info Panel */
-		
-		
-		
-		
+	    
+	    myLeftPanel.add(btnCreateProject);
+	    myLeftPanel.add(btnMyProject);
+	    myLeftPanel.add(btnFavoriteProject);
+	    myLeftPanel.add(btnRemoveProject);
+	    myLeftPanel.add(btnImportProject);
+	    myLeftPanel.add(btnExportProject);
+	    myLeftPanel.add(btnProjectInfo);
+	    myMainPanel.add(myLeftPanel, BorderLayout.WEST);
+	}
+	
+	public void createTitlePanel() {
+		myTitlePanel.setBackground(Color.GRAY);
+		JLabel titleLabel = new JLabel("DIY Project");
+		titleLabel.setFont(new Font("Arial", 1, 20));
+		myTitlePanel.add(titleLabel);
+		myMainPanel.add(myTitlePanel, BorderLayout.NORTH);	
+	}
+	
+	
+	public void createMenu() {
+		JMenu help = new JMenu("Help");
+		JMenu file = new JMenu("File");
+		myMenuBar.add(file);
 		JMenuItem setUsername = new JMenuItem(new AbstractAction("Set/Change Username..."){
-		    public void actionPerformed(ActionEvent e) {
+
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
 		        myUserName = JOptionPane.showInputDialog(FRAME, "Please enter a username.");
 		        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
 		        JOptionPane.showMessageDialog(FRAME, "User Name Changed Successfully!");
@@ -170,15 +186,21 @@ public class DIYProjectMain implements Serializable{
 		    }
 		});
 		JMenuItem setEmail = new JMenuItem(new AbstractAction("Set/Change Email..."){
-		    public void actionPerformed(ActionEvent e) {
+
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
 		        myEmail = JOptionPane.showInputDialog(FRAME, "Please Enter an Email Address.");
 		        JOptionPane.showMessageDialog(FRAME, "Email Changed Successfully!");
 		    }
 		});
 		
 		JMenuItem exportSettings = new JMenuItem(new AbstractAction("Export Settings..."){
-		    public void actionPerformed(ActionEvent e) {
-		        String fileName = JOptionPane.showInputDialog(FRAME, "Please Enter a File to export Settings to (.csv)...");      
+
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+		        String fileName = myUserName + ".csv";      
 		        imp.setFileName(fileName);
 		        imp.setEmail(myEmail);
 		        imp.setUserName(myUserName);
@@ -193,7 +215,10 @@ public class DIYProjectMain implements Serializable{
 		});
 		
 		JMenuItem importSettings = new JMenuItem(new AbstractAction("Import Settings..."){
-		    public void actionPerformed(ActionEvent e) {
+
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
 		        String fileName = JOptionPane.showInputDialog(FRAME, "Please Enter a File to Import Settings From.");
 		        try {
 					imp.importUserName(fileName);
@@ -214,24 +239,15 @@ public class DIYProjectMain implements Serializable{
 		file.add(exportSettings);
 		file.add(importSettings);
 
-		menuBar.add(help);
-		 about = new JMenuItem(new AbstractAction("About..."){
-			    public void actionPerformed(ActionEvent e) {
-			        JOptionPane.showMessageDialog(FRAME, "Made by the Lakers Project Team!\n Version: " + myVersion);
-			    }
-			});
-			help.add(about);
-/***** FRAME *****/
-		FRAME.setJMenuBar(menuBar);
-		FRAME.add(MainPanel);
-		FRAME.setPreferredSize(new Dimension(800, 600));
-		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		FRAME.pack();
-		FRAME.setLocationRelativeTo(null);
-		FRAME.setVisible(true);
-	}
-	
-	public static JPanel getCenterPanel() {
-		return CenterPanel;
+		myMenuBar.add(help);
+		JMenuItem about = new JMenuItem(new AbstractAction("About..."){
+		private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent e) {
+		        JOptionPane.showMessageDialog(FRAME, "Made by the Lakers Project Team!\n Version: " + myVersion);
+		    }
+		});
+		help.add(about);
+
+			
 	}
 }
