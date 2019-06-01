@@ -71,4 +71,10 @@ public class Project {
 	public void addInstructions(String inst) {
 		myInstructions.add(inst);
 	}
+	
+	public String toString() {
+		return "Name: " + myName + "\n Desc: " + myDescription + "\n Difficulty: " 
+				+ myDifficulty + "\n Cost: " + myProjectFinances.getCost() + "\n Time: " + myProjectTime.getTimePeriod() 
+				+ "\n Materials: " + myProjectItems.getMat().toString() + "\n Tools: " + myProjectItems.getTools().toString();
+	}
 }

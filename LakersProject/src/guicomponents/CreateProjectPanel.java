@@ -11,16 +11,24 @@ import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.LineBorder;
+import javax.swing.text.JTextComponent;
 
 import data.Database;
 import data.Project;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextPane;
 
 /**
  * Initial GUI for create project dialog.
@@ -37,6 +45,7 @@ public class CreateProjectPanel extends JPanel {
 	private JTextField costInput;
 	private JTextField timeFrom;
 	private JTextField txtTo;
+	private JTextField toolsField;
 	/**
 	 * Create the panel.
 	 */
@@ -44,6 +53,7 @@ public class CreateProjectPanel extends JPanel {
 		myProject = new Project();
 		myDatabase = new Database();
 		setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		setPreferredSize(new Dimension(600, 600));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{615, 0};
 		gridBagLayout.rowHeights = new int[]{69, 122, 90, 55, 55, 0};
@@ -74,14 +84,19 @@ public class CreateProjectPanel extends JPanel {
 		gbc_lblNewLabel.gridy = 0;
 		titlePanel.add(lblNewLabel, gbc_lblNewLabel);
 		
+		JPanel panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 1;
+		titlePanel.add(panel, gbc_panel);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
 		enterNameField = new JTextField();
+		panel.add(enterNameField);
 		enterNameField.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		enterNameField.setText("Enter Name...");
-		GridBagConstraints gbc_enterNameField = new GridBagConstraints();
-		gbc_enterNameField.fill = GridBagConstraints.BOTH;
-		gbc_enterNameField.gridx = 0;
-		gbc_enterNameField.gridy = 1;
-		titlePanel.add(enterNameField, gbc_enterNameField);
+		enterNameField.addFocusListener(new ClearTextFieldOnFocus());
 		enterNameField.setColumns(10);
 		
 		JPanel centerPanel1 = new JPanel();
@@ -103,8 +118,9 @@ public class CreateProjectPanel extends JPanel {
 		imagePanel.setLayout(gbl_imagePanel);
 		
 		JPanel imgPreviewPanel = new JPanel();
+		imgPreviewPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		GridBagConstraints gbc_imgPreviewPanel = new GridBagConstraints();
-		gbc_imgPreviewPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_imgPreviewPanel.insets = new Insets(0, 5, 5, 5);
 		gbc_imgPreviewPanel.fill = GridBagConstraints.BOTH;
 		gbc_imgPreviewPanel.gridx = 0;
 		gbc_imgPreviewPanel.gridy = 0;
@@ -122,6 +138,7 @@ public class CreateProjectPanel extends JPanel {
 		
 		JTextArea summField = new JTextArea();
 		summField.setText("Enter Summary Here...");
+		summField.addFocusListener(new ClearTextFieldOnFocus());
 		summPanel.add(summField);
 		
 		JPanel selectablesPanel = new JPanel();
@@ -166,6 +183,7 @@ public class CreateProjectPanel extends JPanel {
 		gbc_costInput.gridy = 1;
 		selectablesPanel.add(costInput, gbc_costInput);
 		costInput.setColumns(10);
+		costInput.addFocusListener(new ClearTextFieldOnFocus());
 		
 		JLabel lblNewLabel_1 = new JLabel("Enter Time Required");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
@@ -192,6 +210,7 @@ public class CreateProjectPanel extends JPanel {
 		gbc_timeFrom.gridy = 3;
 		selectablesPanel.add(timeFrom, gbc_timeFrom);
 		timeFrom.setColumns(10);
+		timeFrom.addFocusListener(new ClearTextFieldOnFocus());
 		
 		txtTo = new JTextField();
 		txtTo.setText("To");
@@ -202,6 +221,9 @@ public class CreateProjectPanel extends JPanel {
 		gbc_txtTo.gridy = 3;
 		selectablesPanel.add(txtTo, gbc_txtTo);
 		txtTo.setColumns(10);
+		txtTo.addFocusListener(new ClearTextFieldOnFocus());
+		
+		
 		
 		JPanel projDescrPanel = new JPanel();
 		GridBagConstraints gbc_projDescrPanel = new GridBagConstraints();
@@ -215,6 +237,7 @@ public class CreateProjectPanel extends JPanel {
 		JTextArea projDescField = new JTextArea();
 		projDescField.setText("Enter Project Description Here...");
 		projDescrPanel.add(projDescField);
+		projDescField.addFocusListener(new ClearTextFieldOnFocus());
 		
 		JPanel matToolsPanel = new JPanel();
 		GridBagConstraints gbc_matToolsPanel = new GridBagConstraints();
@@ -224,10 +247,10 @@ public class CreateProjectPanel extends JPanel {
 		gbc_matToolsPanel.gridy = 3;
 		add(matToolsPanel, gbc_matToolsPanel);
 		GridBagLayout gbl_matToolsPanel = new GridBagLayout();
-		gbl_matToolsPanel.columnWidths = new int[]{334, 213, 0};
+		gbl_matToolsPanel.columnWidths = new int[]{285, 213, 0};
 		gbl_matToolsPanel.rowHeights = new int[]{30, 0, 0};
 		gbl_matToolsPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_matToolsPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_matToolsPanel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		matToolsPanel.setLayout(gbl_matToolsPanel);
 		
 		JLabel materialLabel = new JLabel("Materials");
@@ -246,24 +269,25 @@ public class CreateProjectPanel extends JPanel {
 		gbc_toolLabel.gridy = 0;
 		matToolsPanel.add(toolLabel, gbc_toolLabel);
 		
-		JComboBox materialPicker = new JComboBox();
-		materialPicker.setEditable(true);
-		materialPicker.setModel(new DefaultComboBoxModel(new String[] {"Add a Material..."}));
-		GridBagConstraints gbc_materialPicker = new GridBagConstraints();
-		gbc_materialPicker.insets = new Insets(0, 0, 0, 5);
-		gbc_materialPicker.fill = GridBagConstraints.HORIZONTAL;
-		gbc_materialPicker.gridx = 0;
-		gbc_materialPicker.gridy = 1;
-		matToolsPanel.add(materialPicker, gbc_materialPicker);
+		JTextField materialsField = new JTextField();
+		materialsField.setText("Add materials (separate by commas)...");
+		materialsField.addFocusListener(new ClearTextFieldOnFocus());
+		GridBagConstraints gbc_materialsField = new GridBagConstraints();
+		gbc_materialsField.insets = new Insets(0, 0, 0, 5);
+		gbc_materialsField.fill = GridBagConstraints.BOTH;
+		gbc_materialsField.gridx = 0;
+		gbc_materialsField.gridy = 1;
+		matToolsPanel.add(materialsField, gbc_materialsField);
 		
-		JComboBox toolPicker = new JComboBox();
-		toolPicker.setEditable(true);
-		toolPicker.setModel(new DefaultComboBoxModel(new String[] {"Add a Tool..."}));
-		GridBagConstraints gbc_toolPicker = new GridBagConstraints();
-		gbc_toolPicker.fill = GridBagConstraints.HORIZONTAL;
-		gbc_toolPicker.gridx = 1;
-		gbc_toolPicker.gridy = 1;
-		matToolsPanel.add(toolPicker, gbc_toolPicker);
+		toolsField = new JTextField();
+		toolsField.setText("Add tools (separate by commas)...");
+		toolsField.addFocusListener(new ClearTextFieldOnFocus());
+		GridBagConstraints gbc_toolsField = new GridBagConstraints();
+		gbc_toolsField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_toolsField.gridx = 1;
+		gbc_toolsField.gridy = 1;
+		matToolsPanel.add(toolsField, gbc_toolsField);
+		toolsField.setColumns(10);
 		
 		JPanel instrPanel = new JPanel();
 		GridBagConstraints gbc_instrPanel = new GridBagConstraints();
@@ -305,8 +329,23 @@ public class CreateProjectPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				myProject.setName(enterNameField.getText());
 				myProject.setDescription(projDescField.getText());
-				myProject.setDifficulty(diffLabel.getText());
-				myProject.getProjectFinances().setCost(Double.parseDouble(costInput.getText()));			
+				myProject.setDifficulty((String) diffSelector.getSelectedItem());
+				myProject.getProjectFinances().setCost(Double.parseDouble(costInput.getText()));
+				myProject.getProjectTime().editTime(Integer.parseInt(timeFrom.getText()), Integer.parseInt(txtTo.getText()), (String) comboBox.getSelectedItem());
+				
+				String[] matList = materialsField.getText().split(",");
+				for (String mat : matList) {
+					myProject.getProjectItems().addMat(mat);
+				}
+				
+				String[] toolList = toolsField.getText().split(",");
+				for (String tool : toolList) {
+					myProject.getProjectItems().addTool(tool);
+				}
+				JOptionPane.showMessageDialog(null, "Project Saved Succesfully!");
+				System.out.println(myProject.toString());
+				myDatabase.addProject(myProject);
+
 			}
 		});
 		controlPanel.add(saveButton);
@@ -315,5 +354,28 @@ public class CreateProjectPanel extends JPanel {
 		controlPanel.add(quitButton);
 
 	}
+	
+	private class ClearTextFieldOnFocus implements FocusListener {
+
+		private boolean alreadyCleared;
+		
+		public ClearTextFieldOnFocus() {
+			alreadyCleared = false;
+		}
+		
+		@Override
+		public void focusGained(FocusEvent arg0) {
+			if (!alreadyCleared) {
+				((JTextComponent) arg0.getSource()).setText("");
+				alreadyCleared = true;
+			}
+			
+		}
+		@Override
+		public void focusLost(FocusEvent arg0) {
+		}
+	}
 
 }
+
+
