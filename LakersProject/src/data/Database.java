@@ -15,12 +15,17 @@ public class Database {
 	}
 	
 	public Project getProject(String projName) {
+		Project curr = null;
 		for (Project p : myProjects) {
 			if (p.getName().equals(projName)) {
-				return p;
+				curr = p;
 			}
 		}
-		return null;
+		return curr;
+	}
+	
+	public List<Project> getAllProjects(){
+		return myProjects;
 	}
 	
 	public void sortByDifficulty(String diff) {

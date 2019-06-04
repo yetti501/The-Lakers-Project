@@ -2,6 +2,7 @@ package guimain;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -9,47 +10,58 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
+import data.Database;
 import data.Project;
 
 /**
- * 
+ * @version 5/30/19
  * @author Thias David
  */
-public class CenterPanelWithProjects {
+public class CenterPanelWithProjects extends JPanel {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	public static void main(String[]args) {
-		CenterPanelWithProjects cpwp = new CenterPanelWithProjects();
-	}
+	public Database myDatabase;
 	
+	public List<Project> myProjects;
 	
-	public ArrayList<Project> myProjects;
+	public DefaultListModel<Project> myList;
 	
-	
-	public CenterPanelWithProjects(){
+
+	/**
+	 * @author Thias David
+	 * @version 6/3/19
+	 * @param theDatabase - the database that holds all the projects
+	 */
+	public CenterPanelWithProjects(Database theDatabase){
+		
+		myDatabase = theDatabase;
+		myProjects = theDatabase.getAllProjects();
+		
 		JFrame frame = new JFrame();
 		
-//		DefaultListModel<String> list = new DefaultListModel<>();
-		DefaultListModel<Project> list = new DefaultListModel<>();
 		
-		Project p = new Project();
-		Project p1 = new Project();
-		Project p2 = new Project();
+		DefaultListModel<Project> myList = new DefaultListModel<>();
 		
-
-		
-		
-//		JList<String> projects = new JList<>(list); 
-		JList<Project> projects = new JList<>(list);
+		JList<Project> projects = new JList<>(myList);
 		projects.setVisibleRowCount(3);
-		projects.setFont(projects.getFont().deriveFont(30.0f));
+		projects.setFont(projects.getFont().deriveFont(22.0f));
 		
 		projects.setCellRenderer(new MyListCellRenderer());
 		
-//		list.addElement(p.getName() + "\n" + p.getDescription() + "\n" + p.getProjectFinances().getCost());
-		list.addElement(p);
-		list.addElement(p1);
-		list.addElement(p2);
+		JScrollPane scrolly = new JScrollPane(
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		frame.setContentPane(scrolly);
+		
+		for( Project p : myProjects) {
+			myList.addElement(p);
+		}
 		
 		
 		projects.setBounds(400,400,400,400);
@@ -60,15 +72,21 @@ public class CenterPanelWithProjects {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public void getProjects() {
-		
+	
+	/**
+	 * @version 6/3/19
+	 * @author Thias David
+	 * @param theNewList
+	 */
+	public void updateProjects(List<Project> theNewList) {
+		myProjects = theNewList;
+		myList.clear();
+		for(Project p : myProjects) {
+			myList.addElement(p);
+		}
 	}
-	
-	
-	
-	
+		
 }
-
 	
 
 class MyListCellRenderer extends DefaultListCellRenderer{
