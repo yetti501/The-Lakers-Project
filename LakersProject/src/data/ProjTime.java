@@ -14,7 +14,7 @@ public class ProjTime {
 	}
 	
 	public String getTimePeriod() {
-		return myTimeStart - myTimeEnd + " " + myTimeUnit;
+		return myTimeEnd - myTimeStart+ " " + myTimeUnit;
 	}
 	
 	public void editTime(int start, int end, String unit) {

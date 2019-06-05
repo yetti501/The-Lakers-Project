@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 import data.Database;
-import data.Project;
 import guicomponents.CreateProjectPanel;
 /**
  * Main controller class for the application, sets up the GUI and its related components.
@@ -74,7 +73,6 @@ public class DIYProjectMain implements Serializable{
 		myInfoPanel = new JPanel();
 		myTitlePanel = new JPanel();
 		myMenuBar = new JMenuBar();
-		
 		//Setup main panel
 		myMainPanel.setBackground(Color.DARK_GRAY);
 		myMainPanel.setLayout(new BorderLayout());
@@ -129,6 +127,7 @@ public class DIYProjectMain implements Serializable{
 	    btnCreateProject.addActionListener(new ActionListener(){  
 	        public void actionPerformed(ActionEvent e){  
 	                if(e.getSource() == btnCreateProject) {
+	                	myMainPanel.remove(myCreateProjectPanel);
 	                	myCreateProjectPanel = new CreateProjectPanel(myDatabase);
 	                	myMainPanel.remove(myInfoPanel);
 	                	myMainPanel.add(myCreateProjectPanel, BorderLayout.CENTER);
