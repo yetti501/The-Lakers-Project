@@ -14,7 +14,7 @@ import java.util.Scanner;
 import data.Project;
 
 public class ImportExportHelper {
-	ArrayList<Project> myProjects;
+	Database myProjects;
 	String myFileName;
 	String myUserName;
 	String myEmail;
@@ -35,30 +35,11 @@ public class ImportExportHelper {
 //	String myInstructionList;
 //	/**/
 	
-	public ImportExportHelper() {
-		myProjects = new ArrayList<Project>();
+	public ImportExportHelper(Database theProjects) {
+		myProjects = theProjects
 		myFileName = DEFAULT_FILE_NAME;
 		myUserName = "";
 		myEmail = "";
-	}
-	
-	
-	public ImportExportHelper(ArrayList<Project> theProjects , String theFileName) {
-		myProjects = theProjects; 
-		myFileName = theFileName;
-		myUserName = "";
-		myEmail = "";
-	}
-	
-	
-	public ImportExportHelper(ArrayList<Project> theProjects,
-			String theFileName,
-			String theUserName,
-			String theEmail) {
-		myProjects = theProjects;
-		myFileName = theFileName;
-		myUserName = theUserName;
-		myEmail = theEmail;
 	}
 	
 	public void setUserName(String userName) {
@@ -70,33 +51,26 @@ public class ImportExportHelper {
 	}
 	
 	public void importProjects(String theFileName) {
-//		File file = new File(theFileName);
-//		try {
-//			Scanner inputStream = new Scanner(file);
-//			while(inputStream.hasNext()) {
-//				String data = inputStream.next();
-//				String[] values = data.split(",");
-//				for(String s : values) {
-//					System.out.println(s);
-//				}
-//			}
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		}
 		
 		BufferedReader buff = null;
 		String line = "";
 		String delimiter = ",";
 		String quotes = "\"";
-		ArrayList<String> row = new ArrayList<String>(); 
+
 //		ArrayList<ArrayList<String>> elements = new ArrayList<ArrayList<String>>(); 
 		
+		
+		int currIndex = 0;
 		
 		try {
 			buff = new BufferedReader(new FileReader(theFileName));
 			while((line = buff.readLine()) != null) { // Reads the first line, aka skipping it because the first line is useless.
+
 				
 				while((line = buff.readLine()) != null) { // Actually reads the data and adds it to the Array List
+					
+					ArrayList<String> row = new ArrayList<String>(); 
+					Project proj = new Project();
 					String[] data = line.split(quotes);
 					String[] temp = data[0].split(delimiter);
 					for(int i = 0; i < temp.length; i++) {
@@ -104,10 +78,32 @@ public class ImportExportHelper {
 					}
 					row.add(data[1]);
 					row.add(data[3]);
-					row.add(data[5]);					
+					row.add(data[5]);
+					
+					proj.setName(row.get(currIndex));
+					proj.setDifficulty(row.get(currIndex + 3));
+					proj.getProjectFinances().setCost(Double.parseDouble(row.get(currIndex + 4)));
+					proj.getProjectTime().editTime(Integer.parseInt(row.get(currIndex + 6)), Integer.parseInt(row.get(currIndex + 7)), row.get(currIndex + 5));
+					proj.setDescription(row.get(currIndex) + 8);
+					
+					//Add Materials
+					String materials = row.get(currIndex + 9);
+					String[] mats = materials.split(".");
+					for (String str : mats) {
+						proj.getProjectItems().addMat(str);
+					}
+					
+					//Add tools
+					String tools = row.get(currIndex + 10);
+					String[] tool = materials.split(".");
+					for (String str : tool) {
+						proj.getProjectItems().addTool(str);
+					}
+					currIndex += 12;
+					System.out.println(proj.toString());
 				}
 			}
-
+			
 			/*
 			 * row 0 : Project Number
 			 * row 1 : Project Name
@@ -123,28 +119,15 @@ public class ImportExportHelper {
 			 * row 11 : Instruction List  
 			 */
 			
-//				System.out.println("Project Number: " + row.get(0) + "\n"
-//						 + "Project Name: " + row.get(1) + "\n"
-//						 + "Project Summary: " + row.get(2) + "\n"
-//						 + "Difficulty: " + row.get(3) + "\n"
-//						 + "Cost: " + row.get(4) + "\n"
-//						 + "Time Units: " + row.get(5) + "\n"
-//						 + "Start Time: " + row.get(6) + "\n"
-//						 + "End Time: " + row.get(7) + "\n"
-//						 + "Project Description: "+ row.get(8) + "\n"
-//						 + "Materials List: " + row.get(9) + "\n"
-//						 + "Tools List: " + row.get(10) + "\n"
-//						 + "Instruction List: " + row.get(11));
-//				System.out.println("\n");
-
+			
+			
+			
 			buff.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
-		return row;
-//		return elements;
+		}	
 		
 	}
 	
