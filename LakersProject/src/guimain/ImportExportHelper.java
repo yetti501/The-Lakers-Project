@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -165,7 +166,7 @@ public class ImportExportHelper {
 		
 // 		return projects;
 		
-		public void exportFile(ArrayList<String> elements) throws IOException {		
+//		public void exportFile(ArrayList<String> elements) throws IOException {		
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter a file name: ");
 		String myFileName = scanner.nextLine();
@@ -176,15 +177,33 @@ public class ImportExportHelper {
 		String FILEHEADER = "Project Number,Project Name,Project Summary,Difficulty,Cost,Time Units,Start Time,End Time,Project Description,Materials List,Tools List,Instruction List\n";
 		outputFile.append(FILEHEADER);
 		
+		Project pro = new Project();
+		int counter= 0;
 		try {
-			for(int i = 0; i < elements.size(); i++) {
-				
-				if(i % 11 == 0 && i != 1) {
-					outputFile.append("\n");
-				} else {
-					outputFile.append(elements.get(i) + ",");
-				}
-			}
+			outputFile.append(new Integer(counter).toString());
+			outputFile.append(",");
+			outputFile.append(pro.getName());
+			outputFile.append(",");
+			outputFile.append("");
+			outputFile.append(",");
+			outputFile.append(pro.getDifficulty());
+			outputFile.append(",");
+			outputFile.append(pro.getProjectFinances().toString());
+			outputFile.append(",");
+			outputFile.append(pro.getProjectTime().toString());
+			outputFile.append(",");
+			outputFile.append("");
+			outputFile.append(",");
+			outputFile.append("");
+			outputFile.append(",");
+			outputFile.append(pro.getDescription());
+			outputFile.append(",");
+			outputFile.append(pro.getProjectItems().getMat().toString());
+			outputFile.append(",");
+			outputFile.append(pro.getProjectItems().getTools().toString());
+			outputFile.append(",");
+			outputFile.append("");
+			
 			
 		}  catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -193,7 +212,7 @@ public class ImportExportHelper {
 		outputFile.close();
 	}
 }
-	}
+
 	
 	
 	public void exportSettings() throws IOException {
