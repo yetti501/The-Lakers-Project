@@ -161,9 +161,38 @@ public class ImportExportHelper {
 	}
 	
 	public File exportProjects(){
-		File projects = new File("projects");
+// 		File projects = new File("projects");
 		
-		return projects;
+// 		return projects;
+		
+		public void exportFile(ArrayList<String> elements) throws IOException {		
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Enter a file name: ");
+		String myFileName = scanner.nextLine();
+		myFileName =myFileName.concat(".csv");
+		System.out.println("File Name: " + myFileName);
+		File file = new File(myFileName);
+		FileWriter outputFile = new FileWriter(file);
+		String FILEHEADER = "Project Number,Project Name,Project Summary,Difficulty,Cost,Time Units,Start Time,End Time,Project Description,Materials List,Tools List,Instruction List\n";
+		outputFile.append(FILEHEADER);
+		
+		try {
+			for(int i = 0; i < elements.size(); i++) {
+				
+				if(i % 11 == 0 && i != 1) {
+					outputFile.append("\n");
+				} else {
+					outputFile.append(elements.get(i) + ",");
+				}
+			}
+			
+		}  catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+		scanner.close();
+		outputFile.close();
+	}
+}
 	}
 	
 	
