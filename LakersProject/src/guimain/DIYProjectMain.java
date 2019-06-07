@@ -18,6 +18,10 @@ public class DIYProjectMain implements Serializable{
 	
 	private static final long serialVersionUID = -109507167636461364L;
 
+	/** Import Export Helper **/
+	private ImportExportHelper myImpExpHelper;
+	
+	
 /** APPLICATION SETTINGS */
 	private String myUserName;
 	private String myEmail;
@@ -63,9 +67,9 @@ public class DIYProjectMain implements Serializable{
 		myUserName = "Not Set";
 		myEmail = "Not Set";
 		FRAME = new JFrame("DIY Project | " + "UserName: " + myUserName);
-		imp = new ImportExportHelper();
-		myCreateProjectPanel = new CreateProjectPanel(myDatabase);
 		myDatabase = new Database();
+		myCreateProjectPanel = new CreateProjectPanel(myDatabase);
+		myImpExpHelper = new ImportExportHelper(myDatabase);
 		
 		///Construct Panel
 		myLeftPanel = new JPanel();
@@ -118,7 +122,27 @@ public class DIYProjectMain implements Serializable{
 		JButton btnFavoriteProject = new JButton("Favorite Project");
 		JButton btnRemoveProject = new JButton("Remove Project");
 		JButton btnImportProject = new JButton("Import Project");
+		btnImportProject.addActionListener(new ActionListener(){  
+	        public void actionPerformed(ActionEvent e){  
+	                if(e.getSource() == btnImportProject) {
+	                	myImpExpHelper.importProjects(myUserName);
+	                	JOptionPane.showMessageDialog(FRAME, myDatabase.getAllProjects());
+
+	                }
+	        	}
+	        });
+		
 		JButton btnExportProject = new JButton("Export Project");
+		btnExportProject.addActionListener(new ActionListener(){  
+	        public void actionPerformed(ActionEvent e){  
+	                if(e.getSource() == btnExportProject) {
+	                	myImpExpHelper.exportProjects(myUserName);
+	    		        JOptionPane.showMessageDialog(FRAME, "Exported Succesfully!");
+	                }
+	        	}
+	        });
+		
+		
 		JButton btnProjectInfo = new JButton("Info Panel");
 		
 		myLeftPanel.setBackground(Color.DARK_GRAY);

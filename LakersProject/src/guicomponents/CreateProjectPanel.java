@@ -51,7 +51,7 @@ public class CreateProjectPanel extends JPanel {
 	 */
 	public CreateProjectPanel(Database theDatabase) {
 		myProject = new Project();
-		myDatabase = new Database();
+		myDatabase = theDatabase;
 		setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		setPreferredSize(new Dimension(600, 600));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -345,7 +345,6 @@ public class CreateProjectPanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Project Saved Succesfully!");
 				System.out.println(myProject.toString());
 				myDatabase.addProject(myProject);
-
 			}
 		});
 		controlPanel.add(saveButton);

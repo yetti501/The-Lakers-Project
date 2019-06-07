@@ -26,4 +26,8 @@ public class ProjFinances {
 	public void setCost(double cost) {
 		myCost = cost;
 	}
+	
+	public String toString() {
+		return "" + myCost;
+	}
 }

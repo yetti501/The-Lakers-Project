@@ -47,4 +47,20 @@ public class ProjItems {
 	public List<String> getTools() {
 		return myTools;
 	}
+	
+	public String toString() {
+		String output = "\"";
+		for (String temp : myMaterials) {
+			output += (temp ) +",";
+		}
+		output+="\"";
+		output += ",";
+		output+="\"";
+		for (String temp : myTools) {
+			output += temp + ",";
+		}
+		output+="\"";
+		return output;
+	}
+	
 }
