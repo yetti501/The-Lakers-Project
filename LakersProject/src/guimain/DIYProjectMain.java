@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 import data.Database;
+import data.Project;
 import guicomponents.CreateProjectPanel;
 /**
  * Main controller class for the application, sets up the GUI and its related components.
@@ -66,7 +67,7 @@ public class DIYProjectMain implements Serializable{
 		//Fields for model
 		myUserName = "Not Set";
 		myEmail = "Not Set";
-		FRAME = new JFrame("DIY Project | " + "UserName: " + myUserName);
+		FRAME = new JFrame("DIY Project Planner | " + "UserName: " + myUserName);
 		myDatabase = new Database();
 		myCreateProjectPanel = new CreateProjectPanel(myDatabase);
 		myImpExpHelper = new ImportExportHelper(myDatabase);
@@ -118,21 +119,22 @@ public class DIYProjectMain implements Serializable{
 	
 	public void createLeftPanel() {
 		JButton btnCreateProject = new JButton("Create Project");	
-		JButton btnMyProject = new JButton("My Project");
-		JButton btnFavoriteProject = new JButton("Favorite Project");
-		JButton btnRemoveProject = new JButton("Remove Project");
-		JButton btnImportProject = new JButton("Import Project");
+		JButton btnImportProject = new JButton("Import Projects");
 		btnImportProject.addActionListener(new ActionListener(){  
 	        public void actionPerformed(ActionEvent e){  
 	                if(e.getSource() == btnImportProject) {
 	                	myImpExpHelper.importProjects(myUserName);
-	                	JOptionPane.showMessageDialog(FRAME, myDatabase.getAllProjects());
+	                	String importedProjects = "Imported Projects: " + "\n";
+	                	for (Project p : myDatabase.getAllProjects()) {
+		                	importedProjects += p.toString();	
+	                	}
+	                	JOptionPane.showMessageDialog(FRAME, importedProjects);
 
 	                }
 	        	}
 	        });
 		
-		JButton btnExportProject = new JButton("Export Project");
+		JButton btnExportProject = new JButton("Export Projects");
 		btnExportProject.addActionListener(new ActionListener(){  
 	        public void actionPerformed(ActionEvent e){  
 	                if(e.getSource() == btnExportProject) {
@@ -143,7 +145,7 @@ public class DIYProjectMain implements Serializable{
 	        });
 		
 		
-		JButton btnProjectInfo = new JButton("Info Panel");
+		JButton btnProjectInfo = new JButton("My Projects");
 		
 		myLeftPanel.setBackground(Color.DARK_GRAY);
 		myLeftPanel.setLayout(new BoxLayout(myLeftPanel, BoxLayout.Y_AXIS));
@@ -175,9 +177,6 @@ public class DIYProjectMain implements Serializable{
 		});
 	    
 	    myLeftPanel.add(btnCreateProject);
-	    myLeftPanel.add(btnMyProject);
-	    myLeftPanel.add(btnFavoriteProject);
-	    myLeftPanel.add(btnRemoveProject);
 	    myLeftPanel.add(btnImportProject);
 	    myLeftPanel.add(btnExportProject);
 	    myLeftPanel.add(btnProjectInfo);
@@ -186,7 +185,7 @@ public class DIYProjectMain implements Serializable{
 	
 	public void createTitlePanel() {
 		myTitlePanel.setBackground(Color.GRAY);
-		JLabel titleLabel = new JLabel("DIY Project");
+		JLabel titleLabel = new JLabel("Lakers DIY Planner");
 		titleLabel.setFont(new Font("Arial", 1, 20));
 		myTitlePanel.add(titleLabel);
 		myMainPanel.add(myTitlePanel, BorderLayout.NORTH);	
@@ -218,49 +217,8 @@ public class DIYProjectMain implements Serializable{
 		    }
 		});
 		
-		JMenuItem exportSettings = new JMenuItem(new AbstractAction("Export Settings..."){
-
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent e) {
-		        String fileName = myUserName + ".csv";      
-		        imp.setFileName(fileName);
-		        imp.setEmail(myEmail);
-		        imp.setUserName(myUserName);
-		        try {
-					imp.exportSettings();
-			        JOptionPane.showMessageDialog(FRAME, "Exported Settings Successfully");
-				} catch (IOException e1) {
-
-				}
-
-		    }
-		});
-		
-		JMenuItem importSettings = new JMenuItem(new AbstractAction("Import Settings..."){
-
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent e) {
-		        String fileName = JOptionPane.showInputDialog(FRAME, "Please Enter a File to Import Settings From.");
-		        try {
-					imp.importUserName(fileName);
-			        myUserName = imp.myUserName;
-			        myEmail = imp.myEmail;
-			        JOptionPane.showMessageDialog(FRAME, "Imported Username " + myUserName + " and Email " + myEmail);
-			        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
-
-					
-				} catch (FileNotFoundException e1) {
-			        JOptionPane.showMessageDialog(FRAME, "File not found, please try again!");
-				}
-		    }
-		});
-		
 		file.add(setUsername);
 		file.add(setEmail);
-		file.add(exportSettings);
-		file.add(importSettings);
 
 		myMenuBar.add(help);
 		JMenuItem about = new JMenuItem(new AbstractAction("About..."){

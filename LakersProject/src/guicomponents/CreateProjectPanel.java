@@ -75,7 +75,7 @@ public class CreateProjectPanel extends JPanel {
 		gbl_titlePanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		titlePanel.setLayout(gbl_titlePanel);
 		
-		JLabel lblNewLabel = new JLabel("Update/Create a Project");
+		JLabel lblNewLabel = new JLabel("Create a New Project");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.fill = GridBagConstraints.VERTICAL;
