@@ -2,6 +2,7 @@ package guimain;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,6 +12,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import data.Database;
 import data.Project;
 
 public class ImportExportHelper {
@@ -36,7 +38,7 @@ public class ImportExportHelper {
 //	/**/
 	
 	public ImportExportHelper(Database theProjects) {
-		myProjects = theProjects
+		myProjects = theProjects;
 		myFileName = DEFAULT_FILE_NAME;
 		myUserName = "";
 		myEmail = "";
@@ -63,7 +65,7 @@ public class ImportExportHelper {
 		int currIndex = 0;
 		
 		try {
-			buff = new BufferedReader(new FileReader(theFileName));
+			buff = new BufferedReader(new FileReader(theFileName + ".csv"));
 			while((line = buff.readLine()) != null) { // Reads the first line, aka skipping it because the first line is useless.
 
 				
@@ -80,27 +82,27 @@ public class ImportExportHelper {
 					row.add(data[3]);
 					row.add(data[5]);
 					
-					proj.setName(row.get(currIndex));
+					proj.setName(row.get(currIndex + 1));
 					proj.setDifficulty(row.get(currIndex + 3));
 					proj.getProjectFinances().setCost(Double.parseDouble(row.get(currIndex + 4)));
 					proj.getProjectTime().editTime(Integer.parseInt(row.get(currIndex + 6)), Integer.parseInt(row.get(currIndex + 7)), row.get(currIndex + 5));
-					proj.setDescription(row.get(currIndex) + 8);
+					proj.setDescription(row.get(currIndex + 8));
 					
 					//Add Materials
 					String materials = row.get(currIndex + 9);
-					String[] mats = materials.split(".");
+					String[] mats = materials.split(",");
 					for (String str : mats) {
 						proj.getProjectItems().addMat(str);
 					}
 					
 					//Add tools
 					String tools = row.get(currIndex + 10);
-					String[] tool = materials.split(".");
+					String[] tool = materials.split(",");
 					for (String str : tool) {
 						proj.getProjectItems().addTool(str);
 					}
-					currIndex += 12;
-					System.out.println(proj.toString());
+					//currIndex += 12;
+					myProjects.addProject(proj);
 				}
 			}
 			
@@ -144,57 +146,53 @@ public class ImportExportHelper {
 		}
 	}
 	
-	public File exportProjects(){
-// 		File projects = new File("projects");
-		
-// 		return projects;
-		
-//		public void exportFile(ArrayList<String> elements) throws IOException {		
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter a file name: ");
-		String myFileName = scanner.nextLine();
+	public void exportProjects(String theFileName){
+		System.out.println(myProjects.getAllProjects());
+		String myFileName = theFileName;
 		myFileName =myFileName.concat(".csv");
 		System.out.println("File Name: " + myFileName);
-		File file = new File(myFileName);
-		FileWriter outputFile = new FileWriter(file);
-		String FILEHEADER = "Project Number,Project Name,Project Summary,Difficulty,Cost,Time Units,Start Time,End Time,Project Description,Materials List,Tools List,Instruction List\n";
-		outputFile.append(FILEHEADER);
-		
-		Project pro = new Project();
-		int counter= 0;
 		try {
-			outputFile.append(new Integer(counter).toString());
-			outputFile.append(",");
-			outputFile.append(pro.getName());
-			outputFile.append(",");
-			outputFile.append("");
-			outputFile.append(",");
-			outputFile.append(pro.getDifficulty());
-			outputFile.append(",");
-			outputFile.append(pro.getProjectFinances().toString());
-			outputFile.append(",");
-			outputFile.append(pro.getProjectTime().toString());
-			outputFile.append(",");
-			outputFile.append("");
-			outputFile.append(",");
-			outputFile.append("");
-			outputFile.append(",");
-			outputFile.append(pro.getDescription());
-			outputFile.append(",");
-			outputFile.append(pro.getProjectItems().getMat().toString());
-			outputFile.append(",");
-			outputFile.append(pro.getProjectItems().getTools().toString());
-			outputFile.append(",");
-			outputFile.append("");
-			
-			
-		}  catch (FileNotFoundException e) {
+		BufferedWriter outputFile = new BufferedWriter(new FileWriter(myFileName));
+		String FILEHEADER = "Project Number,Project Name,Project Summary,Difficulty,Cost,Time Units,Start Time,End Time,Project Description,Materials List,Tools List,Instruction List\n";
+
+		outputFile.append(FILEHEADER);
+		for (Project pro : myProjects.getAllProjects()) {
+			int counter= 0;
+				//Row 0
+				outputFile.append(new Integer(counter).toString());
+				outputFile.append(",");
+				//Row 1
+				outputFile.append(pro.getName());
+				outputFile.append(",");
+				//Row 2
+				outputFile.append("Not Implemented");
+				outputFile.append(",");
+				//Row 3
+				outputFile.append(pro.getDifficulty());
+				outputFile.append(",");
+				//Row 4
+				outputFile.append(pro.getProjectFinances().toString());
+				outputFile.append(",");
+				//Row 5-7
+				outputFile.append(pro.getProjectTime().toString());
+				outputFile.append(",");
+				//Row 8
+				outputFile.append(pro.getDescription());
+				outputFile.append(",");
+				//Rows 9-10
+				outputFile.append(pro.getProjectItems().toString());
+				outputFile.append(",");
+				//Row 11
+				outputFile.append("\"Not Implemented\"");
+				outputFile.append("\n");
+				counter +=1;
+		}
+		
+		outputFile.close();	
+		}  catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		scanner.close();
-		outputFile.close();
 	}
-}
 
 	
 	

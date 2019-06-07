@@ -22,4 +22,22 @@ public class ProjTime {
 		myTimeEnd = end;
 		myTimeUnit = unit;
 	}
+	
+	public String toString() {
+		return myTimeUnit + "," + myTimeStart + "," + myTimeEnd;
+	}
+	
+	public int getStart() {
+		return myTimeStart;
+	}
+	
+	public int getEnd() {
+		return myTimeEnd;
+	}
+	
+	public String getUnits() {
+		return myTimeUnit;
+	}
+	
+	
 }
