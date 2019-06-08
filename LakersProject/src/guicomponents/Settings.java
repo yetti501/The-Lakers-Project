@@ -7,6 +7,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * Main controller class for the application, sets up the GUI and its related components.
+ * @author Lakers Project Team
+ */
+
+//This class is not used but was helpful becuase we were trying
+//to create a settings panel.This was helpful becuase its good
+//for practice in order to create frames, jpanels, jlabels.
 public class Settings extends JFrame {
 
 String userWord = "";
