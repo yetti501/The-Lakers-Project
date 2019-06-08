@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import guimain.DIYProjectMain;
 import guimain.Version;
 
-
+//This class is helpful setting up our JUnit tests
 class VersionTests {
 
 	Version testVersion;
