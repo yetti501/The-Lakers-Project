@@ -15,6 +15,12 @@ import java.util.Scanner;
 import data.Database;
 import data.Project;
 
+/**
+ * This class implements our import and export function 
+ * @author Lakers Project Team
+ */
+
+//Setting up variables
 public class ImportExportHelper {
 	Database myProjects;
 	String myFileName;
@@ -37,6 +43,8 @@ public class ImportExportHelper {
 //	String myInstructionList;
 //	/**/
 	
+	//This function is important becuase we want to display our username
+	//Also want to display our email name
 	public ImportExportHelper(Database theProjects) {
 		myProjects = theProjects;
 		myFileName = DEFAULT_FILE_NAME;
@@ -44,10 +52,12 @@ public class ImportExportHelper {
 		myEmail = "";
 	}
 	
+	//Sets the username
 	public void setUserName(String userName) {
 		myUserName = userName;
 	}
 	
+	//Sets the emailaddress of the user
 	public void setEmail(String email) {
 		myEmail = email;
 	}
@@ -133,6 +143,7 @@ public class ImportExportHelper {
 		
 	}
 	
+	//importuserName   
 	
 	public void importUserName(String theFileName) throws FileNotFoundException {
 		File file = new File(theFileName);
@@ -146,6 +157,7 @@ public class ImportExportHelper {
 		}
 	}
 	
+	//Exports projects function where we will convert our files to csv
 	public void exportProjects(String theFileName){
 		System.out.println(myProjects.getAllProjects());
 		String myFileName = theFileName;
