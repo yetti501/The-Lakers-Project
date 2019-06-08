@@ -107,7 +107,7 @@ public class DIYProjectMain implements Serializable{
 		projVersion.setVersion();
 	}
 	
-	
+	//Creating the infopanel.This will contain our about
 	public void createInfoPanel() {
 		FlowLayout layout = new FlowLayout();
 		layout.setHgap(10);
@@ -116,7 +116,7 @@ public class DIYProjectMain implements Serializable{
 		myInfoPanel.setBackground(Color.LIGHT_GRAY);
 		myInfoPanel.add(new JButton("Close Window"));
 	}
-	
+	//Creating buttons on panels so user can easily click on them.
 	public void createLeftPanel() {
 		JButton btnCreateProject = new JButton("Create Project");	
 		JButton btnImportProject = new JButton("Import Projects");
@@ -183,6 +183,8 @@ public class DIYProjectMain implements Serializable{
 	    myMainPanel.add(myLeftPanel, BorderLayout.WEST);
 	}
 	
+	//This is our background look for our webapplication
+	//This is how we want to display our application.
 	public void createTitlePanel() {
 		myTitlePanel.setBackground(Color.GRAY);
 		JLabel titleLabel = new JLabel("Lakers DIY Planner");
@@ -191,7 +193,8 @@ public class DIYProjectMain implements Serializable{
 		myMainPanel.add(myTitlePanel, BorderLayout.NORTH);	
 	}
 	
-	
+	//This creates the menu for file and help. 
+	//When user clicks on File they can Set/Change Username 
 	public void createMenu() {
 		JMenu help = new JMenu("Help");
 		JMenu file = new JMenu("File");
