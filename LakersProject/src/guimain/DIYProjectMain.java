@@ -107,7 +107,7 @@ public class DIYProjectMain implements Serializable{
 		projVersion.setVersion();
 	}
 	
-	//Creating the infopanel.This will contain our about
+	//Creating the infopanel.
 	public void createInfoPanel() {
 		FlowLayout layout = new FlowLayout();
 		layout.setHgap(10);
@@ -195,6 +195,7 @@ public class DIYProjectMain implements Serializable{
 	
 	//This creates the menu for file and help. 
 	//When user clicks on File they can Set/Change Username 
+	
 	public void createMenu() {
 		JMenu help = new JMenu("Help");
 		JMenu file = new JMenu("File");
@@ -222,7 +223,8 @@ public class DIYProjectMain implements Serializable{
 		
 		file.add(setUsername);
 		file.add(setEmail);
-
+		//When user clicks help they will see our about
+		//Users will see our info displayed on screen.
 		myMenuBar.add(help);
 		JMenuItem about = new JMenuItem(new AbstractAction("About..."){
 		private static final long serialVersionUID = 1L;
