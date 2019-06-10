@@ -1,8 +1,134 @@
+//package guimain;
+//
+//import java.awt.Component;
+//import java.awt.Dimension;
+//import java.util.List;
+//import java.util.ArrayList;
+//
+//import javax.swing.DefaultListCellRenderer;
+//import javax.swing.DefaultListModel;
+//import javax.swing.JFrame;
+//import javax.swing.JLabel;
+//import javax.swing.JList;
+//import javax.swing.JPanel;
+//import javax.swing.JScrollPane;
+//
+//import data.Database;
+//import data.Project;
+//
+///**
+// * 
+// * @author Thias David
+// */
+//public class CenterPanelWithProjects extends JPanel{
+////
+////	public static void main(String[]args) {
+////		Database db = new Database();
+////		db.addProject(new Project());
+////		db.addProject(new Project());
+////		
+////		CenterPanelWithProjects cpwp = new CenterPanelWithProjects(db);
+////		
+////		JFrame frame = new JFrame();
+////		frame.add(cpwp);
+////		frame.setVisible(true);
+////		
+////	}
+//
+//
+//	public JPanel myPanel;
+//	public ArrayList<Project> myProjects;
+//	public Database myDatabase;
+//	public DefaultListModel<Project> myList;
+//	public JList<Project> myJList;
+//
+//
+//	/**
+//	 * 
+//	 * @author Thias David
+//	 * @version 6/6/19
+//	 */
+//	public CenterPanelWithProjects(Database theDatabase){
+//		myPanel = new JPanel();
+////		JFrame frame = new JFrame();
+//		myDatabase = theDatabase;
+//		
+////		DefaultListModel<String> list = new DefaultListModel<>();
+//		myList = new DefaultListModel<>();
+//
+////		JList<String> projects = new JList<>(list); 
+//		myJList = new JList<>(myList);
+//		myJList.setVisibleRowCount(3);
+//		myJList.setFont(myJList.getFont().deriveFont(22.0f));
+//
+//		myJList.setCellRenderer(new MyListCellRenderer());
+//
+//		myJList.setVisible(true);
+//		
+//		for(Project p : myDatabase.getAllProjects()) {
+//			myList.addElement(p);
+//		}
+//		
+//		myJList.setVisible(true);
+//		
+//		JScrollPane scroll = new JScrollPane(myJList);
+//		
+//		
+////		projects.setBounds(400,400,400,400);
+//		myPanel.add(myJList);
+//		myPanel.setSize(400, 400);
+//		myPanel.setVisible(true);
+//		myPanel.setLayout(null);
+//	}
+//
+//	public void updateProjects(List<Project> theNewList) {
+//		myDatabase = new Database();
+//		myList.clear();
+//		
+//		
+//		for(Project p : theNewList) {
+//			myDatabase.addProject(p);
+//			myList.addElement(p);
+//		}
+//		myJList = new JList<>(myList);
+//		myJList.setVisibleRowCount(3);
+//		myJList.setFont(myJList.getFont().deriveFont(22.0f));
+//
+//		myJList.setCellRenderer(new MyListCellRenderer());
+//	}
+//
+//
+//
+//
+//}
+//
+//
+//
+//class MyListCellRenderer extends DefaultListCellRenderer{
+//
+//	public Component getListCellRendererComponent(
+//			JList list, Object value, int index, 
+//			boolean isSelected, boolean cellHasFocus) {
+//		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//		Project project = (Project) value;
+//		String name = project.getName();
+//		Double cost = project.getProjectFinances().getCost();
+//		String diff = project.getDifficulty();
+//		String desc = project.getDescription();
+//
+//		String label = "<html>Project Name: " + name + "<br/>Cost: " + cost + "<br/>Difficulty: " + diff + "\n" + desc;
+//		setText(label);
+//
+//		return this;
+//	}
+//
+//}
+//
+
 package guimain;
 
 import java.awt.Component;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -10,60 +136,49 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
-import data.Database;
 import data.Project;
 
 /**
- * @version 5/30/19
- * @author Thias David
- */
-public class CenterPanelWithProjects extends JPanel {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+* 
+* @author Thias David
+*/
+public class CenterPanelWithProjects {
 
-	public Database myDatabase;
-	
-	public List<Project> myProjects;
-	
-	public DefaultListModel<Project> myList;
-	
+	public static void main(String[]args) {
+		CenterPanelWithProjects cpwp = new CenterPanelWithProjects();
+	}
 
-	/**
-	 * @author Thias David
-	 * @version 6/3/19
-	 * @param theDatabase - the database that holds all the projects
-	 */
-	public CenterPanelWithProjects(Database theDatabase){
-		
-		myDatabase = theDatabase;
-		myProjects = theDatabase.getAllProjects();
-		
+
+	public ArrayList<Project> myProjects;
+
+
+	public CenterPanelWithProjects(){
 		JFrame frame = new JFrame();
-		
-		
-		DefaultListModel<Project> myList = new DefaultListModel<>();
-		
-		JList<Project> projects = new JList<>(myList);
+
+//		DefaultListModel<String> list = new DefaultListModel<>();
+		DefaultListModel<Project> list = new DefaultListModel<>();
+
+		Project p = new Project();
+		Project p1 = new Project();
+		Project p2 = new Project();
+
+
+
+
+//		JList<String> projects = new JList<>(list); 
+		JList<Project> projects = new JList<>(list);
 		projects.setVisibleRowCount(3);
 		projects.setFont(projects.getFont().deriveFont(22.0f));
-		
+
 		projects.setCellRenderer(new MyListCellRenderer());
-		
-		JScrollPane scrolly = new JScrollPane(
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		frame.setContentPane(scrolly);
-		
-		for( Project p : myProjects) {
-			myList.addElement(p);
-		}
-		
-		
+
+//		list.addElement(p.getName() + "\n" + p.getDescription() + "\n" + p.getProjectFinances().getCost());
+		list.addElement(p);
+		list.addElement(p1);
+		list.addElement(p2);
+
+
 		projects.setBounds(400,400,400,400);
 		frame.add(projects);
 		frame.setSize(800, 800);
@@ -71,26 +186,20 @@ public class CenterPanelWithProjects extends JPanel {
 		frame.setLayout(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
-	
-	/**
-	 * @version 6/3/19
-	 * @author Thias David
-	 * @param theNewList
-	 */
-	public void updateProjects(List<Project> theNewList) {
-		myProjects = theNewList;
-		myList.clear();
-		for(Project p : myProjects) {
-			myList.addElement(p);
-		}
+
+	public void getProjects() {
+
 	}
-		
+
+
+
+
 }
-	
+
+
 
 class MyListCellRenderer extends DefaultListCellRenderer{
-	
+
 	public Component getListCellRendererComponent(
 			JList list, Object value, int index, 
 			boolean isSelected, boolean cellHasFocus) {
@@ -99,12 +208,12 @@ class MyListCellRenderer extends DefaultListCellRenderer{
 		String name = project.getName();
 		Double cost = project.getProjectFinances().getCost();
 		String diff = project.getDifficulty();
-		String desc = project.getDescription();
 		
-		String label = "<html>Project Name: " + name + "<br/>Cost: " + cost + "<br/>Difficulty: " + diff + "\n" + desc;
+
+		String label = "<html>Project Name: " + name + "<br/>Cost: " + cost + "<br/>Difficulty: " + diff;
 		setText(label);
-		
+
 		return this;
 	}
-	
+
 }

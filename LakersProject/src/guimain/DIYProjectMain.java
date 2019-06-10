@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 import data.Database;
+import data.Project;
 import guicomponents.CreateProjectPanel;
 /**
  * Main controller class for the application, sets up the GUI and its related components.
@@ -18,6 +19,10 @@ public class DIYProjectMain implements Serializable{
 	
 	private static final long serialVersionUID = -109507167636461364L;
 
+	/** Import Export Helper **/
+	private ImportExportHelper myImpExpHelper;
+	
+	
 /** APPLICATION SETTINGS */
 	private String myUserName;
 	private String myEmail;
@@ -62,10 +67,10 @@ public class DIYProjectMain implements Serializable{
 		//Fields for model
 		myUserName = "Not Set";
 		myEmail = "Not Set";
-		FRAME = new JFrame("DIY Project | " + "UserName: " + myUserName);
-		imp = new ImportExportHelper();
-		myCreateProjectPanel = new CreateProjectPanel(myDatabase);
+		FRAME = new JFrame("DIY Project Planner | " + "UserName: " + myUserName);
 		myDatabase = new Database();
+		myCreateProjectPanel = new CreateProjectPanel(myDatabase);
+		myImpExpHelper = new ImportExportHelper(myDatabase);
 		
 		///Construct Panel
 		myLeftPanel = new JPanel();
@@ -102,7 +107,7 @@ public class DIYProjectMain implements Serializable{
 		projVersion.setVersion();
 	}
 	
-	
+	//Creating the infopanel.
 	public void createInfoPanel() {
 		FlowLayout layout = new FlowLayout();
 		layout.setHgap(10);
@@ -111,15 +116,36 @@ public class DIYProjectMain implements Serializable{
 		myInfoPanel.setBackground(Color.LIGHT_GRAY);
 		myInfoPanel.add(new JButton("Close Window"));
 	}
-	
+	//Creating buttons on panels so user can easily click on them.
 	public void createLeftPanel() {
 		JButton btnCreateProject = new JButton("Create Project");	
-		JButton btnMyProject = new JButton("My Project");
-		JButton btnFavoriteProject = new JButton("Favorite Project");
-		JButton btnRemoveProject = new JButton("Remove Project");
-		JButton btnImportProject = new JButton("Import Project");
-		JButton btnExportProject = new JButton("Export Project");
-		JButton btnProjectInfo = new JButton("Info Panel");
+		JButton btnImportProject = new JButton("Import Projects");
+		btnImportProject.addActionListener(new ActionListener(){  
+	        public void actionPerformed(ActionEvent e){  
+	                if(e.getSource() == btnImportProject) {
+	                	myImpExpHelper.importProjects(myUserName);
+	                	String importedProjects = "Imported Projects: " + "\n";
+	                	for (Project p : myDatabase.getAllProjects()) {
+		                	importedProjects += p.toString();	
+	                	}
+	                	JOptionPane.showMessageDialog(FRAME, importedProjects);
+
+	                }
+	        	}
+	        });
+		
+		JButton btnExportProject = new JButton("Export Projects");
+		btnExportProject.addActionListener(new ActionListener(){  
+	        public void actionPerformed(ActionEvent e){  
+	                if(e.getSource() == btnExportProject) {
+	                	myImpExpHelper.exportProjects(myUserName);
+	    		        JOptionPane.showMessageDialog(FRAME, "Exported Succesfully!");
+	                }
+	        	}
+	        });
+		
+		
+		JButton btnProjectInfo = new JButton("My Projects");
 		
 		myLeftPanel.setBackground(Color.DARK_GRAY);
 		myLeftPanel.setLayout(new BoxLayout(myLeftPanel, BoxLayout.Y_AXIS));
@@ -151,23 +177,24 @@ public class DIYProjectMain implements Serializable{
 		});
 	    
 	    myLeftPanel.add(btnCreateProject);
-	    myLeftPanel.add(btnMyProject);
-	    myLeftPanel.add(btnFavoriteProject);
-	    myLeftPanel.add(btnRemoveProject);
 	    myLeftPanel.add(btnImportProject);
 	    myLeftPanel.add(btnExportProject);
 	    myLeftPanel.add(btnProjectInfo);
 	    myMainPanel.add(myLeftPanel, BorderLayout.WEST);
 	}
 	
+	//This is our background look for our webapplication
+	//This is how we want to display our application.
 	public void createTitlePanel() {
 		myTitlePanel.setBackground(Color.GRAY);
-		JLabel titleLabel = new JLabel("DIY Project");
+		JLabel titleLabel = new JLabel("Lakers DIY Planner");
 		titleLabel.setFont(new Font("Arial", 1, 20));
 		myTitlePanel.add(titleLabel);
 		myMainPanel.add(myTitlePanel, BorderLayout.NORTH);	
 	}
 	
+	//This creates the menu for file and help. 
+	//When user clicks on File they can Set/Change Username 
 	
 	public void createMenu() {
 		JMenu help = new JMenu("Help");
@@ -194,50 +221,10 @@ public class DIYProjectMain implements Serializable{
 		    }
 		});
 		
-		JMenuItem exportSettings = new JMenuItem(new AbstractAction("Export Settings..."){
-
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent e) {
-		        String fileName = myUserName + ".csv";      
-		        imp.setFileName(fileName);
-		        imp.setEmail(myEmail);
-		        imp.setUserName(myUserName);
-		        try {
-					imp.exportSettings();
-			        JOptionPane.showMessageDialog(FRAME, "Exported Settings Successfully");
-				} catch (IOException e1) {
-
-				}
-
-		    }
-		});
-		
-		JMenuItem importSettings = new JMenuItem(new AbstractAction("Import Settings..."){
-
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent e) {
-		        String fileName = JOptionPane.showInputDialog(FRAME, "Please Enter a File to Import Settings From.");
-		        try {
-					imp.importUserName(fileName);
-			        myUserName = imp.myUserName;
-			        myEmail = imp.myEmail;
-			        JOptionPane.showMessageDialog(FRAME, "Imported Username " + myUserName + " and Email " + myEmail);
-			        FRAME.setTitle("DIY Project | " + "UserName: " + myUserName);
-
-					
-				} catch (FileNotFoundException e1) {
-			        JOptionPane.showMessageDialog(FRAME, "File not found, please try again!");
-				}
-		    }
-		});
-		
 		file.add(setUsername);
 		file.add(setEmail);
-		file.add(exportSettings);
-		file.add(importSettings);
-
+		//When user clicks help they will see our about
+		//Users will see our info displayed on screen.
 		myMenuBar.add(help);
 		JMenuItem about = new JMenuItem(new AbstractAction("About..."){
 		private static final long serialVersionUID = 1L;
